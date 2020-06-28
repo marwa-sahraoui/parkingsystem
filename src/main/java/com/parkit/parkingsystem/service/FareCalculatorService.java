@@ -3,34 +3,30 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
+import java.time.Duration;
+
 public class FareCalculatorService {
 
-   /*
-   methode de calcule calculatefare sans remise
-    */
+    /**
+     * Methode de calcule calculatefare sans remise
+     * @param ticket
+     */
     public void calculateFare(Ticket ticket) {
         calculateFare(ticket, 1);
     }
-    /*
-    calcule de methode avec remise
 
+    /**
+     * Calcule de methode avec remise
+     * @param ticket
+     * @param pourcentagePayee
      */
     public void calculateFare(Ticket ticket, double pourcentagePayee) {
         if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
             throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
         }
 
-        int inDays = ticket.getInTime().getDay();           // recuperer le jour d 'entrée
-        int outDays = ticket.getOutTime().getDay();         // recuperer le jour de sortie
-        int inHours = ticket.getInTime().getHours();        // l'heure d 'entrée
-        int outHours = ticket.getOutTime().getHours();      // l'heure de sortie
-        int inMinutes = ticket.getInTime().getMinutes();    // la minute d'entrée
-        int outMinutes = ticket.getOutTime().getMinutes();  // la minute de sortie
-
-
-        double durationDays = (double) outDays - inDays;
-        double durationHours = (double) outHours - inHours;
-        double durationMinutes = (double) outMinutes - inMinutes;
+        Duration between = Duration.between(ticket.getInTime().toInstant(), ticket.getOutTime().toInstant());
+        double durationMinutes = (double) between.toMinutes();
 
         //Si le temps est inférieur à une heure on doit calculer
         //la duréé en minute puis convertir en heure en divisant par 60
@@ -38,9 +34,7 @@ public class FareCalculatorService {
         //par 60 pour avoir la duréé en heure vu que le tarif(fare) est calculer en heure
 
         //’TODO: Some tests are failing here. Need to check if this logic is correct
-
-        double duration = ((durationDays * 24 * 60) + durationHours * 60 + durationMinutes) / 60;
-
+        double duration = durationMinutes / 60;
 
         // si la durée <= 30 min le prix de stationnement est 0
         if (duration <= 0.5) {

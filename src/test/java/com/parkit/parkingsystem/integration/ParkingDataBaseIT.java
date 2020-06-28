@@ -81,11 +81,10 @@ public class ParkingDataBaseIT {
     @Test
     public void testParkingLotExit() throws Exception {
         testParkingACar();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);////      Ticket ticketSaved = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-// a effacer
-//       ticketSaved.setInTime(new Date(ticketSaved.getInTime().getTime() - 31 * 60000));
-//      ticketDAO.saveTicket(ticketSaved);
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);     Ticket ticketSaved = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
 
+     //pour avoir un temps de sortie different à celui d'entrée on fait stationner le vehicule pour 2scd
+       //puis on fait sortir le vehicule
         try {
             Thread.sleep(5 * 1000);
         } catch (InterruptedException ie) {
