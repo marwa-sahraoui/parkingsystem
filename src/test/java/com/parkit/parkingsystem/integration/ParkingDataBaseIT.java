@@ -86,7 +86,7 @@ public class ParkingDataBaseIT {
      //pour avoir un temps de sortie different à celui d'entrée on fait stationner le vehicule pour 2scd
        //puis on fait sortir le vehicule
         try {
-            Thread.sleep(5 * 1000);
+            Thread.sleep(2 * 1000);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
         }

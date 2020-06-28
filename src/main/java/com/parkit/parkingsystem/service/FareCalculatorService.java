@@ -9,6 +9,7 @@ public class FareCalculatorService {
 
     /**
      * Methode de calcule calculatefare sans remise
+     *
      * @param ticket
      */
     public void calculateFare(Ticket ticket) {
@@ -17,6 +18,7 @@ public class FareCalculatorService {
 
     /**
      * Calcule de methode avec remise
+     *
      * @param ticket
      * @param pourcentagePayee
      */
@@ -26,6 +28,7 @@ public class FareCalculatorService {
         }
 
         Duration between = Duration.between(ticket.getInTime().toInstant(), ticket.getOutTime().toInstant());
+
         double durationMinutes = (double) between.toMinutes();
 
         //Si le temps est inférieur à une heure on doit calculer
@@ -34,6 +37,11 @@ public class FareCalculatorService {
         //par 60 pour avoir la duréé en heure vu que le tarif(fare) est calculer en heure
 
         //’TODO: Some tests are failing here. Need to check if this logic is correct
+        Long durationMiliS = between.toMillis();
+        double seconds = (double) durationMiliS / 1000 - durationMinutes * 60;
+        if (seconds > 30) {
+            durationMinutes++;
+        }
         double duration = durationMinutes / 60;
 
         // si la durée <= 30 min le prix de stationnement est 0

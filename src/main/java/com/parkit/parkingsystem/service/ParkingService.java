@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
 
+import static com.parkit.parkingsystem.constants.Fare.DISCOUNTED_RATE;
+
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -111,7 +113,7 @@ public class ParkingService {
             ticket.setOutTime(outTime) ;
 
             if (ticketDAO.countTicket(vehicleRegNumber) > 1) {
-                fareCalculatorService.calculateFare(ticket, 0.95);
+                fareCalculatorService.calculateFare(ticket, DISCOUNTED_RATE);
             } else {
                 fareCalculatorService.calculateFare(ticket, 1);
             }

@@ -16,8 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
+import static com.parkit.parkingsystem.constants.Fare.DISCOUNTED_RATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -52,7 +55,7 @@ public class ParkingServiceIT {
 
     @AfterAll
     private static void tearDown() {
-
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
@@ -75,18 +78,16 @@ public class ParkingServiceIT {
         ticketSaved.setInTime(new Date(ticketSaved.getInTime().getTime() - 60 * 60000));//entréé a une heure avant
         ticketSaved.setOutTime(new Date());
         ticketDAO.updateTicket(ticketSaved); //mise a jour du ticket pour avoir la date de sortie
-
         parkingService.processExitingVehicle();
-
         ticketSaved = ticketDAO.getTicket("ABCDEF");
-        assertTrue(ticketSaved.getPrice() == Fare.CAR_RATE_PER_HOUR); //ticket pour la premiere fois sans remise
+        assertEquals(Fare.CAR_RATE_PER_HOUR * 1, ticketSaved.getPrice());
 
         parkingService.processIncomingVehicle();  //la meme vehicule entre pour une 2 eme fois
         ticketSaved.setInTime(new Date(ticketSaved.getInTime().getTime() - 60 * 60000));
         ticketSaved.setOutTime(new Date());
         parkingService.processExitingVehicle();
         ticketSaved = ticketDAO.getTicket("ABCDEF");// on verifie le prix avec remise
-        assertTrue(ticketSaved.getPrice() == Fare.CAR_RATE_PER_HOUR * 0.95);
+        assertEquals(Fare.CAR_RATE_PER_HOUR * DISCOUNTED_RATE, ticketSaved.getPrice());
     }
 
 
